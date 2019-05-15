@@ -11,7 +11,9 @@ We presented about the idea at the [PDF Days Europe 2017 in Berlin](https://www.
 # Download
 This repository contains a commandline tool and GUI application. You can find latest version through [release link](https://github.com/Normex/PDF-Derivation/releases) where you want to download bin.zip file.
 
-Follow direct link to the latest version of executables: https://github.com/Normex/PDF-Derivation/releases/latest/download/bin.zip
+Follow direct link to the latest version of executables.
+https://github.com/Normex/PDF-Derivation/releases/latest/download/bin.zip
+
 We only build 64 bit windows version, download the zip file and unpack to your prefered location
 
 ## Command line application

@@ -28,7 +28,10 @@ second parameter is existing output folder.
 
 ## GUI application
 
-We utilise chromium to show result html alongside with original pdf. The use of the gui app is pretty straightforward. Just open pdf file and check html tag for result. HTML file is stored in application subfolder
+We utilise chromium to show result html alongside with original pdf. The use of the gui app is pretty straightforward. 
+
+run PDFDerivation_app.exe application. From menu open pdf file and check html tab for result. HTML file is stored in application subfolder.
+
 
 # Sample files
 

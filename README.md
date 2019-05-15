@@ -30,7 +30,7 @@ second parameter is existing output folder.
 
 We utilise chromium to show result html alongside with original pdf. The use of the gui app is pretty straightforward. 
 
-run PDFDerivation_app.exe application. From menu open pdf file and check html tab for result. HTML file is stored in application subfolder.
+run <b>PDFDerivation_app.exe</b> application. From menu open pdf file and check html tab for result. HTML file is stored in application subfolder.
 
 
 # Sample files

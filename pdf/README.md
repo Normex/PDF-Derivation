@@ -21,6 +21,12 @@ Standard Layout attributes used to preserve layout information like color or sty
 ## [table_complex_with_headerIDs.pdf](https://github.com/Normex/PDF-Derivation/blob/master/pdf/table_complex_with_headerIDs.pdf)
 Each table cell refers to it's headers through ID which is preserved in the html. Pdf and html would be consumed by screen reader in the same way
 
+## [af_css_table.pdf](https://github.com/Normex/PDF-Derivation/blob/master/pdf/af_css_table.pdf)
+the same file as table_complex_with_headerIDs.pdf. Extensive styling is achieved with associated CSS file attached to the Document structure element. The css file is used by result html.
+
+## [af_css_js_sort_table.pdf](https://github.com/Normex/PDF-Derivation/blob/master/pdf/af_css_js_sort_table.pdf)
+Example of interactive table with associated files. The css file is used to style "sortable" class which is assigned to table strucure element via "C" entry. The associated javascript file allows sorting of table by clicking on a table header
+
 ## [Letter_DOC.pdf](https://github.com/Normex/PDF-Derivation/blob/master/pdf/Letter_DOC.pdf)
 Standard Microsoft Word template saved as PDF in MS Word 2016. Microsoft Word doesn't convert any styling information into attributes. The layout isn't preserved either.
 

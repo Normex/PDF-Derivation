@@ -51,7 +51,6 @@ Currently we only provide project files for Windows, but the code is platform in
 Feel free to submit bugs, problematic files, comments, questions, suggestions by creating new issue in [Issues section](https://github.com/Normex/PDF-Derivation/issues) or [e-mail us](mailto:pdf-derivation@digitaldocuments.org) 
 
 # Licensing
-All assets and code are provided under the [MIT License](https://github.com/Normex/PDF-Derivation/blob/master/LICENSE)
-We use free version of [PDFix SDK](http://https.pdfix.net/) 
+All assets and code are provided under the [MIT License](https://github.com/Normex/PDF-Derivation/blob/master/LICENSE) (we use free version of [PDFix SDK](https://pdfix.net/)) 
 
 Should you have any questions or requests contact us: [e-mail us](mailto:pdf-derivation@digitaldocuments.org)

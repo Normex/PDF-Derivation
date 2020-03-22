@@ -3,12 +3,14 @@
 Implementation of an algorithm that converts well-tagged pdf files into HTML
 
 Since 2016 we have been actively participating in [PDF Association Technical Working Group](https://www.pdfa.org/community/next-generation-pdf-technical-working-group/) with the aim to address needs of industry for changing the way PDF files are consumed. The main concern was whether or not the traditional fixed-layout pdf contains enough information to be safely and unambiguously interpreted as html - therefore responsive and reusable in different environments.
+
 The output of the work is the [Deriving HTML from PDF](https://www.pdfa.org/resource/deriving-html-from-pdf/) - document that describes how the process of conversion could be done. Version 1.0 of the publication was released by [PDF Association](https://www.pdfa.org) in June 2019.
+
 We presented about the idea at the [PDF Days Europe 2017 in Berlin](https://www.youtube.com/watch?v=cFr7SI8pMZk) and [Electronic Document Conference 2019 in Seattle](https://www.youtube.com/watch?v=hTh7KIYvj0E&list=PLfGR40SWnakjHir089hAtNZUF7pOXmW6r&index=17)
 
 As a part of the work we came up with referential set of pdf documents and implementation. These should provide enough insights into the whole concept.
 
-We also publishing articles about the concept like these [1](https://www.pdfa.org/pdf-on-the-web-then-and-now/) [2](https://www.pdfa.org/deriving-html-from-pdf-an-algorithm/) and based on real world implementations we are working on future versions of the algorithm.
+We also publishing articles about the concept like these [[1](https://www.pdfa.org/pdf-on-the-web-then-and-now/) [2](https://www.pdfa.org/deriving-html-from-pdf-an-algorithm/)] and based on real world implementations we are working on future versions of the algorithm.
 
 
 # Download
@@ -49,10 +51,6 @@ Currently we only provide project files for Windows, but the code is platform in
 Feel free to submit bugs, problematic files, comments, questions, suggestions by creating new issue in [Issues section](https://github.com/Normex/PDF-Derivation/issues) or [e-mail us](mailto:pdf-derivation@digitaldocuments.org) 
 
 # Licensing
-All assets and code are under the [![license]](https://github.com/Normex/PDF-Derivation/blob/master/LICENSE)
-We use free version of [PDFix SDK](http://https.pdfix.net/) 
+All assets and code are provided under the [MIT License](https://github.com/Normex/PDF-Derivation/blob/master/LICENSE) (we use free version of [PDFix SDK](https://pdfix.net/)) 
+
 Should you have any questions or requests contact us: [e-mail us](mailto:pdf-derivation@digitaldocuments.org)
-
-
-
-

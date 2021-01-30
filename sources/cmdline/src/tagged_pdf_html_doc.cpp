@@ -97,7 +97,7 @@ void CTaggedPdfHtmlDoc::save(const std::wstring& path) {
       wstring file_path = m_path + file_name;
       PsStream *file_stream = PDFixSDK::GetPdfix()->CreateFileStream(file_path.c_str(), kPsTruncate);
       if (!file_stream || !file_stream->Write(0, (const uint8_t*)buffer, (int)strlen(buffer)))
-        throw std::exception("Can't write script file");
+        throw std::runtime_error("Can't write script file");
       file_stream->Destroy();
     };
 
@@ -119,7 +119,7 @@ void CTaggedPdfHtmlDoc::save(const std::wstring& path) {
 
   PdsStructTree* struct_tree = m_doc->GetStructTree();
   if (!struct_tree)
-    throw std::exception("Can't acquire structure tree root");
+    throw std::runtime_error("Can't acquire structure tree root");
   for (auto i = 0; i < struct_tree->GetNumKids(); i++) {
     PdsObject* obj = struct_tree->GetKidObject(i);
     PdsStructElement* struct_elem = struct_tree->AcquireStructElement(obj);

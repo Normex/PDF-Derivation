@@ -15,20 +15,20 @@ CDerivedOutputWriter::CDerivedOutputWriter(const wstring& path) {
   m_html_mem_stream = pdfix->CreateMemStream();
   m_html_file_stream = pdfix->CreateFileStream(html_path.c_str(), kPsTruncate);
   if (!m_html_file_stream || !m_html_file_stream)
-    throw std::exception("Error preparing output");
+    throw std::runtime_error("Error preparing output");
 
 
   m_css_mem_stream = pdfix->CreateMemStream();
   wstring css_path = path + L"style.css";
   m_css_file_stream = pdfix->CreateFileStream(css_path.c_str(), kPsTruncate);
   if (!m_css_mem_stream || !m_css_file_stream)
-    throw std::exception("Error preparing output");
+    throw std::runtime_error("Error preparing output");
 
   m_js_mem_stream = pdfix->CreateMemStream();
   wstring js_path = path + L"script.js";
   m_js_file_stream = pdfix->CreateFileStream(js_path.c_str(), kPsTruncate);
   if (!m_js_mem_stream || !m_js_file_stream)
-    throw std::exception("Error preparing output");
+    throw std::runtime_error("Error preparing output");
 
   m_opened = true;
 }
@@ -69,11 +69,11 @@ bool CDerivedOutputWriter::save_and_close() {
 
   if (html_size > 0) {
     if (!m_html_mem_stream->Read(0, &html_data[0], html_size))
-      throw std::exception("Error reading HTML stream");
+      throw std::runtime_error("Error reading HTML stream");
 
 
     if (!m_html_file_stream->Write(m_html_file_stream->GetSize(), &html_data[0], html_size))
-      throw std::exception("Error writing HTML stream");
+      throw std::runtime_error("Error writing HTML stream");
 
     m_html_file_stream->Flush();
   }
@@ -81,22 +81,22 @@ bool CDerivedOutputWriter::save_and_close() {
 
   if (js_size > 0) {
     if (!m_js_mem_stream->Read(0, &js_data[0], js_size))
-      throw std::exception("Error reading JS stream");
+      throw std::runtime_error("Error reading JS stream");
 
 
     if (!m_js_file_stream->Write(m_js_file_stream->GetSize(), &js_data[0], js_size))
-      throw std::exception("Error writing JS stream");
+      throw std::runtime_error("Error writing JS stream");
 
     m_js_file_stream->Flush();
   }
 
   if (css_size > 0) {
     if (!m_css_mem_stream->Read(0, &css_data[0], css_size))
-      throw std::exception("Error reading CSS stream");
+      throw std::runtime_error("Error reading CSS stream");
 
 
     if (!m_css_file_stream->Write(m_css_file_stream->GetSize(), &css_data[0], css_size))
-      throw std::exception("Error writing CSS stream");
+      throw std::runtime_error("Error writing CSS stream");
 
     m_css_file_stream->Flush();
   }

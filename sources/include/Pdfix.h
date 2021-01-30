@@ -12,6 +12,10 @@
 #include <Windows.h>
 #endif
 
+#include <string>
+#include <sstream>
+#include <iostream>
+
 // Unwanted definition of GetObject macro on Windows
 #ifdef GetObject
 #undef GetObject
@@ -21,8 +25,8 @@
 #endif
 
 #define PDFIX_VERSION_MAJOR 5
-#define PDFIX_VERSION_MINOR 3
-#define PDFIX_VERSION_PATCH 5
+#define PDFIX_VERSION_MINOR 4
+#define PDFIX_VERSION_PATCH 6
 #define MAX_INT 2147483647
 #define MIN_INT -2147483647
 #define _in_
@@ -76,7 +80,8 @@ struct PdfDigSig;
 struct PdfCertDigSig;
 struct PdfCustomDigSig;
 struct PdfDoc;
-struct PdfDocTemplate;
+struct PdfDocPreflight;
+struct PdfPagePreflight;
 struct PdfAlternate;
 struct PdfHtmlAlternate;
 struct PdfFont;
@@ -115,7 +120,7 @@ typedef int PdfPageContentFlags;
 typedef int PdfTableType;
 typedef int PdfWordFlags;
 typedef int PdfTextLineFlags;
-typedef int PdfTextRegexFlags;
+typedef int PdfTextFlags;
 typedef int PdfElementFlags;
 typedef int PdfPageInsertFlags;
 
@@ -154,8 +159,8 @@ enum {
   kErrorPdfDocSave = 33,
   kErrorPdfDocXFA = 34,
   kErrorPdfDocClose = 35,
-  kErrorDocTemplateInvalid = 60,
-  kErrorDocTemplateInvalidValue = 61,
+  kErrorDocPreflightInvalid = 60,
+  kErrorDocPreflightInvalidValue = 61,
   kErrorPdfDigSigOpenPfxFile = 90,
   kErrorPdfDigSigSaveFile = 91,
   kErrorPdfDigSigReadFile = 92,
@@ -232,6 +237,7 @@ enum {
   kErrorPdsStructTreeMissing = 512,
   kErrorPdfActionInvalid = 540,
   kErrorDataFormatInvalid = 570,
+  kErrorPdfFormFieldInvalid = 600,
 } ;
 
 typedef enum {
@@ -656,20 +662,34 @@ typedef enum {
 } PdfListType;
 
 enum {
-  kWordHyphen = 0x0001,
-  kWordBullet = 0x0002,
-  kWordFilling = 0x0008,
-  kWordNumber = 0x0010,
-  kWordImage = 0x0020,
-  kWordNoUnicode = 0x0040,
+  kWordFlagHyphen = 0x0001,
+  kWordFlagBullet = 0x0002,
+  kWordFlagColon = 0x0004,
+  kWordFlagNumber = 0x008,
+  kWordFlagSubscript = 0x0010,
+  kWordFlagSupercript = 0x0020,
+  kWordFlagTerminal = 0x0040,
+  kWordFlagFirstCap = 0x0080,
+  kWordFlagImage = 0x00100,
+  kWordFlagNumberingDecimal = 0x0200,
+  kWordFlagNumberingRoman = 0x0400,
+  kWordFlagNumberingLetter = 0x0800,
+  kWordFlagPageNumber = 0x1000,
+  kWordFlagFilling = 0x2000,
+  kWordFlagAllCaps = 0x4000,
+  kWordFlagComma = 0x8000,
+  kWordFlagNoUnicode = 0x10000,
+  kWordFlagLetter = 0x20000,
 } ;
 
 enum {
-  kTextLineNewLine = 0x0001,
-  kTextLineBullet = 0x0002,
-  kTextLineHyphen = 0x0004,
-  kTextLineIndent = 0x0008,
-  kTextLineDropCap = 0x0010,
+  kTextLineFlagHyphen = 0x0001,
+  kTextLineFlagNewLine = 0x0002,
+  kTextLineFlagIndent = 0x0004,
+  kTextLineFlagTerminal = 0x0008,
+  kTextLineFlagDropCap = 0x0010,
+  kTextLineFlagFilling = 0x0020,
+  kTextLineFlagAllCaps = 0x0040,
 } ;
 
 typedef enum {
@@ -691,6 +711,7 @@ enum {
   kTextFlagImageCaption = 0x0002,
   kTextFlagChartCaption = 0x0004,
   kTextFlagFilling = 0x008,
+  kTextFlagAllCaps = 0x010,
 } ;
 
 enum {
@@ -699,6 +720,9 @@ enum {
   kElemArtifact = 0x04,
   kElemHeader = 0x08,
   kElemFooter = 0x10,
+  kElemSplitter = 0x20,
+  kElemNoTable = 0x40,
+  kElemTable = 0x80,
 } ;
 
 typedef enum {
@@ -726,6 +750,7 @@ typedef enum {
 typedef enum {
   kDataFormatJson = 0,
   kDataFormatXml = 1,
+  kDataFormatTxt = 2,
 } PsDataFormat;
 
 typedef enum {
@@ -764,6 +789,16 @@ typedef enum {
   kDestFitBH = 7,
   kDestFitBV = 8,
 } PdfDestFitType;
+
+typedef enum {
+  kLabelUsed = -1,
+  kLabelNone = 0,
+  kLabel = 1,
+  kLabelLevel1 = 2,
+  kLabelLevel2 = 3,
+  kLabelLevel3 = 4,
+  kLabelToc = 100,
+} PdfLabelType;
 
 
 typedef struct _PdfPageRangeParams {
@@ -1225,6 +1260,8 @@ struct PdeElement {
   virtual bool SetActualText(const wchar_t* text) = 0;
   virtual int GetFlags() = 0;
   virtual bool SetFlags(int flags) = 0;
+  virtual int GetNumPageObjects() = 0;
+  virtual PdsPageObject* GetPageObject(int index) = 0;
   PdfRect GetBBox() {
     PdfRect bbox;
     GetBBox(&bbox);
@@ -1364,7 +1401,7 @@ struct PdeText : PdeElement {
   virtual double GetLineSpacing() = 0;
   virtual double GetIndent() = 0;
   virtual PdfTextStyle GetTextStyle() = 0;
-  virtual PdfTextRegexFlags GetTextFlags() = 0;
+  virtual PdfTextFlags GetTextFlags() = 0;
   virtual int GetLabelLevel() = 0;
   virtual bool SetLabelLevel(int level) = 0;
   std::wstring GetText() {
@@ -1565,7 +1602,7 @@ struct PdfDoc {
   virtual PdsObject* CreatePdsObject(PdfObjectType type, bool indirect) = 0;
   virtual bool AddTags(_callback_ PdfCancelProc cancel_proc, void* cancel_data) = 0;
   virtual bool RemoveTags(_callback_ PdfCancelProc cancel_proc, void* cancel_data) = 0;
-  virtual PdfDocTemplate* GetDocTemplate() = 0;
+  virtual PdfDocPreflight* GetDocPreflight() = 0;
   virtual PsMetadata* GetMetadata() = 0;
   virtual int GetLang(_out_ wchar_t* buffer, int len) = 0;
   virtual bool SetLang(const wchar_t* lang) = 0;
@@ -1589,6 +1626,10 @@ struct PdfDoc {
   virtual bool AddFontMissingUnicode(_callback_ PdfCancelProc cancel_proc, void* cancel_data) = 0;
   virtual PdfNameTree* GetNameTree(const wchar_t* name, bool create) = 0;
   virtual void RemoveNameTree(const wchar_t* name) = 0;
+  virtual int GetPageNumFromObject(PdsObject* page_dict) = 0;
+  virtual PdfAnnot* GetAnnotFromObject(PdsObject* annot_dict) = 0;
+  virtual PdfAction* GetActionFromObject(PdsObject* action_obj) = 0;
+  virtual PdfViewDestination* GetViewDestinationFromObject(PdsObject* dest_obj) = 0;
   std::wstring GetDocumentJavaScript(int index) {
     std::wstring buffer;
     buffer.resize(GetDocumentJavaScript(index, nullptr, 0));
@@ -1615,7 +1656,7 @@ struct PdfDoc {
   }
 };
 
-struct PdfDocTemplate {
+struct PdfDocPreflight {
   virtual bool PreflightDoc(_callback_ PdfCancelProc cancel_proc, void* cancel_data) = 0;
   virtual bool LoadFromStream(PsStream* stream, PsDataFormat format) = 0;
   virtual bool SaveToStream(PsStream* stream, PsDataFormat format) = 0;
@@ -1624,11 +1665,31 @@ struct PdfDocTemplate {
   virtual bool SetProperty(const wchar_t* name, double value) = 0;
   virtual int GetRegex(const wchar_t* name, _out_ wchar_t* buffer, int len) = 0;
   virtual bool SetRegex(const wchar_t* name, const wchar_t* pattern) = 0;
+  virtual bool PreflightPage(int page_num) = 0;
+  virtual PdfPagePreflight* GetPagePreflight(int page_num) = 0;
   std::wstring GetRegex(const wchar_t* name) {
     std::wstring buffer;
     buffer.resize(GetRegex(name, nullptr, 0));
     GetRegex(name, (wchar_t*)buffer.c_str(), (int)buffer.size());
     return buffer;
+  }
+};
+
+struct PdfPagePreflight {
+  virtual int GetPageNum() = 0;
+  virtual PdfRotate GetLogicalRotate() = 0;
+  virtual int GetNumColumns() = 0;
+  virtual bool GetHeaderBBox(_out_ PdfRect* bbox) = 0;
+  virtual bool GetFooterBBox(_out_ PdfRect* bbox) = 0;
+  PdfRect GetHeaderBBox() {
+    PdfRect bbox;
+    GetHeaderBBox(&bbox);
+    return bbox;
+  }
+  PdfRect GetFooterBBox() {
+    PdfRect bbox;
+    GetFooterBBox(&bbox);
+    return bbox;
   }
 };
 
@@ -1706,7 +1767,7 @@ struct PdfFormField {
   virtual int GetDefaultValue(_out_ wchar_t* buffer, int len) = 0;
   virtual int GetFullName(_out_ wchar_t* buffer, int len) = 0;
   virtual int GetTooltip(_out_ wchar_t* buffer, int len) = 0;
-  virtual int GetOptionCount() = 0;
+  virtual int GetNumOptions() = 0;
   virtual int GetOptionValue(int index, _out_ wchar_t* buffer, int len) = 0;
   virtual int GetOptionCaption(int index, _out_ wchar_t* buffer, int len) = 0;
   virtual PdfAction* GetAction() = 0;

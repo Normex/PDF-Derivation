@@ -15,7 +15,7 @@ using std::vector;
 CTaggedPdfForm::CTaggedPdfForm(PdfDoc* doc, PdsStructElement* elem, const CTaggedPdfElementConfig& config) : CTaggedPdfElement(doc, elem, config) {
   PdsObject* K_obj = m_elem_dict->Get(L"K");
   if (!K_obj)
-    throw std::exception("Can't identify Form object");
+    throw std::runtime_error("Can't identify Form object");
 
   //todo: this needs refactoring
   PdsDictionary* obj_dict = nullptr;
@@ -34,11 +34,11 @@ CTaggedPdfForm::CTaggedPdfForm(PdfDoc* doc, PdsStructElement* elem, const CTagge
     }
   }
   else {
-    throw std::exception("Can't identify Form object");
+    throw std::runtime_error("Can't identify Form object");
   }
 
   if (!obj_dict)
-    throw std::exception("Can't identify Form object");
+    throw std::runtime_error("Can't identify Form object");
 
   PdsName* ft_name = nullptr;
 
@@ -69,7 +69,7 @@ CTaggedPdfForm::CTaggedPdfForm(PdfDoc* doc, PdsStructElement* elem, const CTagge
   }
 
   if (!ft_name)
-    throw std::exception("Can't identify form type (FT)");
+    throw std::runtime_error("Can't identify form type (FT)");
 
   std::string ft_str;
   ft_str.resize(ft_name->GetValue(nullptr, 0));
@@ -84,7 +84,7 @@ CTaggedPdfForm::CTaggedPdfForm(PdfDoc* doc, PdsStructElement* elem, const CTagge
   else if (ft_str == "Sig")
     m_form_field_type = FormFieldType::Sig;
   else
-    throw std::exception("Unknown form type (FT)");
+    throw std::runtime_error("Unknown form type (FT)");
 
   m_form_dict = obj_dict;
   m_is_form = true;
@@ -175,7 +175,7 @@ void CTaggedPdfForm::process_button_type() {
     else if (value == "JavaScript")
       m_html_begin_tag += " type=\"button\"";
     else
-      throw std::exception("Unsupported action in form object");
+      throw std::runtime_error("Unsupported action in form object");
 
     //todo: refactor. this code will be needed in other AFs
     PdsDictionary* f_obj = action_obj->GetDictionary(L"F");

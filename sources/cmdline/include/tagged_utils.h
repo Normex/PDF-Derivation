@@ -10,8 +10,13 @@
 #include <cstring>
 #include <iomanip>
 
-#include "PDFix.h"
+#include "Pdfix.h"
 using namespace PDFixSDK;
+
+#if defined (__ANDROID__) || defined (__APPLE__) || defined (__GNUC__)
+typedef unsigned char BYTE;
+typedef unsigned short WORD;
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // strings

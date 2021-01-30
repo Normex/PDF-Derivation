@@ -7,13 +7,18 @@
 #ifdef _WIN32
 #include <Windows.h>
 extern HINSTANCE ghInstance;
+#elif defined __linux__
+#include <linux/limits.h>
 #endif
+
 #if defined _MSC_VER
 #include <direct.h>
 #elif defined __GNUC__
 #include <sys/types.h>
 #include <sys/stat.h>
 #endif
+
+
 #include <stdio.h>
 #include <vector>
 #include <fstream>
@@ -273,7 +278,7 @@ std::string get_original_se_type(PdsStructElement* elem) {
     PdsObject* s = (static_cast<PdsDictionary*> (obj))->Get(L"S");
 
     if (s->GetObjectType() != kPdsName)
-      throw std::exception("Name expected as structure element type");
+      throw std::runtime_error("Name expected as structure element type");
 
     std::string value;
     value.resize((static_cast<PdsName*> (s))->GetValue(nullptr, 0));

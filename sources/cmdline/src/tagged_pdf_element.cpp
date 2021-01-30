@@ -86,7 +86,7 @@ CTaggedPdfElement::CTaggedPdfElement(PdfDoc* doc, PdsStructElement* elem, const 
   assert(m_elem);
 
   if (m_elem->GetElementObject()->GetObjectType() != kPdsDictionary)
-    throw std::exception("Dictionary required");
+    throw std::runtime_error("Dictionary required");
   m_elem_dict = static_cast<PdsDictionary*> (elem->GetElementObject());
   m_elem_type = CTaggedPdfUtils::StructElementGetType(elem);
   m_html_tag = CPdfElementToHtmlTagMapper::getInstance().GetHtmlTag(m_elem_type);
@@ -216,10 +216,10 @@ void CTaggedPdfElement::tag_substructure() {
     case PdfStructElementType::kPdsStructKidElement: {
       PdsObject* kid_object = m_elem->GetKidObject(i);
       if (!kid_object)
-        throw std::exception("Can't acquire kid object");
+        throw std::runtime_error("Can't acquire kid object");
       PdsStructElement* kid_struct_element = struct_tree->AcquireStructElement(kid_object);
       if (!kid_struct_element)
-        throw std::exception("Can't acquire kid object");
+        throw std::runtime_error("Can't acquire kid object");
 
       unique_ptr<CTaggedPdfElement> tagged_kid_element = CTaggedPdfElementFactory::make_tagged_structure_element(m_doc, kid_struct_element, m_config);
       tagged_kid_element->tag_element();
@@ -240,7 +240,7 @@ void CTaggedPdfElement::tag_substructure() {
         }
       }
       if (!CTaggedPdfHtmlDoc::m_actual_page.m_page)
-        throw std::exception("Can't locate page for structure element");
+        throw std::runtime_error("Can't locate page for structure element");
 
       //todo: check new mcid handling
       for (int i = 0; i < CTaggedPdfHtmlDoc::m_actual_page.m_page->GetNumPageObjects(); i++) {
@@ -266,7 +266,7 @@ void CTaggedPdfElement::tag_substructure() {
             case kPdsPageUnknown:
               break;
             default:
-              throw std::exception("Invalid object type");
+              throw std::runtime_error("Invalid object type");
               break;
             }
           }
@@ -349,9 +349,9 @@ string CTaggedPdfElement::process_pagemap_image(PdfPage* page, PdsPageObject* ob
   std::wstring image_path = m_config.data_path + image_name;
   PsStream *image_file_stream = GetPdfix()->CreateFileStream(image_path.c_str(), kPsTruncate);
   if (!image_file_stream)
-    throw std::exception("Can't create file for an image");
+    throw std::runtime_error("Can't create file for an image");
   if (!image)
-    throw std::exception("Can't create image");
+    throw std::runtime_error("Can't create image");
 
   render_params.image = image;
   //render_params.render_flags = kRenderNoText | kRenderNoBackground;
@@ -483,7 +483,7 @@ bool CTaggedPdfElement::process_af(PdsDictionary* af_dict) {
         wstring file_name = m_config.data_path + ws_tmp;
         PsStream *file_stream = GetPdfix()->CreateFileStream(file_name.c_str(), kPsTruncate);
         if (!file_stream || !file_stream->Write(0, (const uint8_t*)buffer.get(), len))
-          throw std::exception("Can't save associated file");
+          throw std::runtime_error("Can't save associated file");
         file_stream->Destroy();
       };
 

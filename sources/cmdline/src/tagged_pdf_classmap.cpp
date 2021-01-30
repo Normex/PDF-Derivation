@@ -18,7 +18,7 @@ using std::stringstream;
 CClassMap::CClassMap(PdfDoc* doc) {
   PdsStructTree* st = doc->GetStructTree();
   if (!st)
-    throw std::exception("Input pdf file is not tagged");
+    throw std::runtime_error("Input pdf file is not tagged");
 
   PdsDictionary* st_obj = static_cast<PdsDictionary*> (st->GetObject());
 

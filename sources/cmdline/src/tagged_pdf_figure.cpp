@@ -62,10 +62,10 @@ string CTaggedPdfFigure::render(PdsStructElement* elem) {
     case PdfStructElementType::kPdsStructKidElement: {
       PdsObject* kid_object = elem->GetKidObject(i);
       if (!kid_object)
-        throw std::exception("Can't acquire kid object for rendering");
+        throw std::runtime_error("Can't acquire kid object for rendering");
       PdsStructElement* kid_struct_element = m_doc->GetStructTree()->AcquireStructElement(kid_object);
       if (!kid_struct_element)
-        throw std::exception("Can't acquire kid object for rendering");
+        throw std::runtime_error("Can't acquire kid object for rendering");
 
       //if Caption ==> process figcaption
       wstring elem_type = CTaggedPdfUtils::StructElementGetType(kid_struct_element);
@@ -100,7 +100,7 @@ string CTaggedPdfFigure::render(PdsStructElement* elem) {
         }
       }
       if (!CTaggedPdfHtmlDoc::m_actual_page.m_page)
-        throw std::exception("Can't locate page object required for rendering");
+        throw std::runtime_error("Can't locate page object required for rendering");
 
       //todo: check new mcid handling
       for (int i = 0; i < CTaggedPdfHtmlDoc::m_actual_page.m_page->GetNumPageObjects(); i++) {
@@ -203,9 +203,9 @@ string CTaggedPdfFigure::render_now() {
   std::wstring image_path = m_config.data_path + image_name;
   PsStream *image_file_stream = GetPdfix()->CreateFileStream(image_path.c_str(), kPsTruncate);
   if (!image_file_stream)
-    throw std::exception("Can't create image file for rendering");
+    throw std::runtime_error("Can't create image file for rendering");
   if (!image)
-    throw std::exception("Can't create image for rendering");
+    throw std::runtime_error("Can't create image for rendering");
 
   render_params.image = image;
   //render_params.render_flags = /*kRenderNoText |*/ kRenderNoBackground;

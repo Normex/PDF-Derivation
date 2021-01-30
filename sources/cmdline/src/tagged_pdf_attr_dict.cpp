@@ -224,7 +224,7 @@ void CAttributeDictProcessor::process_layout_owner(PdsDictionary* attr_dict, att
       PdsObject* style = attr_dict->Get(key.c_str());
       if (style->GetObjectType() == kPdsName) {
         string value = w2utf8(CTaggedPdfUtils::PdfNameGetText(static_cast<PdsName*> (style)));
-        std::transform(value.begin(), value.end(), value.begin(), std::tolower);
+        std::transform(value.begin(), value.end(), value.begin(),  [](unsigned char c){ return std::tolower(c); });
         out_css_attrs.insert({ "border-style", value });
       }
       else if (style->GetObjectType() == kPdsArray) {
@@ -234,7 +234,7 @@ void CAttributeDictProcessor::process_layout_owner(PdsDictionary* attr_dict, att
         stringstream values;
         for (int i = 0; i < styles_count; ++i) {
           string value = w2utf8(CTaggedPdfUtils::PdfArrayGetTextAtIndex(styles, i));
-          std::transform(value.begin(), value.end(), value.begin(), std::tolower);
+          std::transform(value.begin(), value.end(), value.begin(),  [](unsigned char c){ return std::tolower(c); });
 
           if (i < (styles_count - 1))
             values << value << " ";
@@ -346,7 +346,7 @@ void CAttributeDictProcessor::process_layout_owner(PdsDictionary* attr_dict, att
       if (value == "LineThrough")
         value = "line-through";
       else {
-        std::transform(value.begin(), value.end(), value.begin(), std::tolower);
+        std::transform(value.begin(), value.end(), value.begin(),  [](unsigned char c){ return std::tolower(c); });
       }
 
       out_css_attrs.insert({ "text-decoration", value });

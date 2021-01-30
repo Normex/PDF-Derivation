@@ -17,7 +17,7 @@ CTaggedPdfListItem::CTaggedPdfListItem(PdfDoc* doc, PdsStructElement* elem, cons
   PdsStructElement* parent_elem = struct_tree->AcquireStructElement(parent_obj);
 
   if (!parent_elem)
-    throw std::exception("Parent element not acquired");
+    throw std::runtime_error("Parent element not acquired");
 
   unique_ptr<CTaggedPdfList> list(new CTaggedPdfList(m_doc, parent_elem, m_config));
   if (list->get_list_type() == CTaggedPdfList::ListType::kDescriptionList)

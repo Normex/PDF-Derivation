@@ -1,37 +1,26 @@
-## Welcome to GitHub Pages
+## Deriving HTML from PDF 
 
-You can use the [editor on GitHub](https://github.com/Normex/PDF-Derivation/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
+Implementation of the [Derivation algorithm](https://www.pdfa.org/resource/deriving-html-from-pdf/) that converts well-tagged pdf files into HTML
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Download & run
+This repository contains a commandline tool. Follow direct link to the latest version of executables.
+https://github.com/Normex/PDF-Derivation/releases/latest/download/bin.zip
 
-### Markdown
+To run commandline application just type:
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+```batch
+derive.exe c:\temp\tagged.pdf c:\temp\output
+``` 
+first parameter is pdf file you want to derive into html
+second parameter is existing output folder.
 
-```markdown
-Syntax highlighted code block
+## Sample files
 
-# Header 1
-## Header 2
-### Header 3
+Even though the derivation algorithm is designed to work properly for all tagged pdf files, it is expected that the best result in terms of visual accuracy is achieved with pdf files that are tagged for this purpose. In the [pdf folder](https://github.com/Normex/PDF-Derivation/blob/master/pdf) you can find set of examples (manually crafted pdf files) that show how specific structure elements, attributes, associated files are used during the derivation and how the author can turn static pdfs into a dynamic html. 
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
+## Feedback
 
-[Link](url) and ![Image](src)
-```
+Feel free to submit bugs, problematic files, comments, questions, suggestions by creating new issue in [Issues section](https://github.com/Normex/PDF-Derivation/issues) or [e-mail us](mailto:pdf-derivation@digitaldocuments.org) 
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Normex/PDF-Derivation/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.

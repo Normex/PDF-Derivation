@@ -15,7 +15,7 @@ Tabular information in two different forms. Standard Layout attributes used to p
 Each table cell refers to it's headers through ID which is preserved in the html. Pdf and html would be consumed by screen reader in the same way
 the same file as table_complex_with_headerIDs.pdf. Extensive styling is achieved with associated CSS file attached to the Document structure element. The css file is used by result html.
 
-### [af_css_js_sort_table.pdf](https://github.com/Normex/PDF-Derivation/blob/master/pdf/af_css_js_sort_table.pdf) [HTML] (https://normex.github.io/PDF-Derivation/af_css_js_sort_table/index.html)
+### [af_css_js_sort_table.pdf](https://github.com/Normex/PDF-Derivation/blob/master/pdf/af_css_js_sort_table.pdf) [HTML](https://normex.github.io/PDF-Derivation/af_css_js_sort_table/index.html)
 Example of interactive table with associated files. The css file is used to style "sortable" class which is assigned to table strucure element via "C" entry. The associated javascript file allows sorting of table by clicking on a table header
 
 ### [BMIBAI_form_css.pdf](https://github.com/Normex/PDF-Derivation/blob/master/pdf/BMIBAI_form_css.pdf) [HTML](https://normex.github.io/PDF-Derivation/BMIBAI_form_css/index.html)
@@ -23,18 +23,6 @@ Acroform fields with various javascript actions. Changing units recalculates val
 
 
 In the [pdf folder](https://github.com/Normex/PDF-Derivation/blob/master/pdf/README.md) you can find full set of examples (manually crafted pdf files) that show how specific structure elements, attributes, associated files are used during the derivation and how the author can turn static pdfs into a dynamic html. 
-
-## Download & run
-This repository contains a commandline tool. Follow direct [link](https://github.com/Normex/PDF-Derivation/releases/latest/download/bin.zip) to the latest version of executables.
-
-To run commandline application just type:
-
-```batch
-derive.exe c:\temp\tagged.pdf c:\temp\output
-``` 
-first parameter is pdf file you want to derive into html
-second parameter is existing output folder.
-
 
 
 ## Feedback
